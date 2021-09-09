@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Premier Base</title>
+</head>
+
+<body>
+  <!-- User Name -->
+    <h2>ユーザーネーム</h2>
+    <input type="text" id="username">
+  
+        <!--応援しているチーム  -->
+    <h2>貴方が応援しているチームは？</h2>
+    <p>
+        <select id="team" required>
+            <option value = "Tottenham">Tottenaham</option>
+            <option value = "West ham">West ham</option>
+            <option value = "Manchester United">Manchester United</option>
+            <option value = "Chelsea">Chelsea</option>
+            <option value = "Liverpool">Liverpool</option>
+            <option value = "Everton">Everton</option>
+            <option value = "Manchester City">Manchester City</option>
+            <option value = "Brighton">Brighton</option>
+            <option value = "Leister City">Leister City</option>
+            <option value = "Brentford">Brentford</option>
+            <option value = "Aston Villa">Aston Villa</option>
+            <option value = "Watford">Watford</option>
+            <option value = "Southampton">Southampton</option>
+            <option value = "Crystal Palace">Crystal Palace</option>
+            <option value = "Leeds United">Leeds United</option>
+            <option value = "Burnley">Burnley</option>
+            <option value = "Newcastle">Newcastle</option>
+            <option value = "Wolves">Wolves</option>
+            <option value = "Norwich">Norwich</option>
+            <option value = "Arsenal">Arsenal</option>
+        </select>
+    </p>
+    <p>応援メッセージ</p>
+    <textarea name="" id="text" cols="30" rows="10"></textarea>
+
+    <button id="send">送信</button>
+
+
+  <!--/ コンテンツ表示画面 -->
+
+  <!-- JQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <!-- JQuery -->
+
+  <!--** 以下Firebase **-->
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/6.6.1/firebase.js"></script>
+
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#config-web-app -->
+
+  <script>
+
+const firebaseConfig = {
+            apiKey: "AIzaSyAfWrpDc_GtyQ8JBmKbpWGJAc0Y6STTuSo",
+            authDomain: "dev-fukuda.firebaseapp.com",
+            databaseURL: "https://dev-fukuda-default-rtdb.firebaseio.com/",
+            projectId: "dev-fukuda",
+            storageBucket: "dev-fukuda.appspot.com",
+            messagingSenderId: "249542126770",
+            appId: "1:249542126770:web:513c3516d29ad83c3fadab"
+            };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    
+    //realtime db 
+    // const newPostRef = firebase.database().ref();
+    const database = firebase.database();
+    // 変数
+    const username = document.getElementById("username");
+    const team = document.getElementById("team");
+    const text = document.getElementById("text");
+
+    const date = new Date();
+
+
+
+    $("#send").on("click", function () {
+
+      // データを登録で送る
+      database.ref().push({
+        username: $("#username").val(), //名前
+        team: $("#team").val(), //推しチーム
+        text: $("#text").val(), //テキストエリア
+      })
+});
+
+    // database.ref(team).on("child_added", function (data) {
+    //   let v = data.val(); 
+
+
+    //   console.log(v); 
+
+    //   let str = `<p>${v.username}<br>${v.team}<br>${v.text}</p>`;
+
+     
+    // })
+
+    $("#text").on("keydown", function (e) {
+      console.log(e, "event");
+
+
+      // エンターキーを押したら送信処理を実行
+      if (e.keyCode === 13) {
+        database.ref(team).push({
+          username: $("#username").val(), //名前
+          team: $("#team").val(), //推しチーム
+          text: $("#text").val(), //テキストエリア
+        })
+      }
+    })
+  </script>
+</body>
+
+</html>

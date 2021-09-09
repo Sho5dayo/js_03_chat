@@ -1,0 +1,14 @@
+#成果物
+    -プレミアリーグ掲示板
+    -本当はFB認証してリアルタイム掲示板を作成したかったのですが、
+    　FB認証がうまくできず頭を悩ませていたら一週間何も進まずに過ぎていました。（大失敗）
+　　-何とかしてFBログインできるようにしたいです。
+###苦労した点
+    -firebaseのSNS連携
+    -FacebookのAPIを取得するのにやり方がわからず時間がかかってしまった。
+    -loginのポップアップがブロックされてしまう原因がわからず一週間たってしまった。
+    -ポップアップブロックの原因がわかった後に、リダイレクトがはじかれてしまい挫折した。
+###参考記事URL
+    -https://blog.katsubemakito.net/firebase/firebase-authentication-facebook-web1
+    -https://firebase.google.com/docs/auth/web/facebook-login?hl=ja
+    -https://qiita.com/dtakkiy/items/572d12d9d1e037c2272d

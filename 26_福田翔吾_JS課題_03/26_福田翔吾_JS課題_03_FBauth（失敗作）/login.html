@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <button onclick = "signin()" id="sign-in">Sign in with Facebook</button>
+    
+    <div id="profile-pic">
+
+
+    </div>
+
+
+    <div id="user-email"></div>
+
+
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-auth.js"></script>
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#config-web-app -->
+
+  <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyAgm0QprKQJKYqp4yf4lQtQSBhX1v3M7vg",
+      authDomain: "dev21chat-9617a.firebaseapp.com",
+      databaseURL: "https://dev21chat-9617a-default-rtdb.firebaseio.com/",
+      projectId: "dev21chat-9617a",
+      storageBucket: "dev21chat-9617a.appspot.com",
+      messagingSenderId: "46500741842",
+      appId: "1:46500741842:web:d52ce3d4c7d4a61445a30b"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    </script>
+
+    <script>
+    function signin() {
+        var provider = new firebase.auth.FacebookAuthProvider();
+        // provider.addScope('user_birthday');
+
+        provider.setCustomParameters({
+    'display': 'popup'
+  });
+
+        firebase.auth().useDeviceLanguage();
+        firebase
+  .auth()
+  .signInWithPopup(provider)
+  .then((result) => {
+    /** @type {firebase.auth.OAuthCredential} */
+    var credential = result.credential;
+
+    // The signed-in user info.
+    var user = result.user;
+    
+
+    // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+    var accessToken = credential.accessToken;
+
+    // ...
+  })
+  .catch((error) => {
+    // Handle Errors here.
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // The email of the user's account used.
+    var email = error.email;
+    // The firebase.auth.AuthCredential type that was used.
+    var credential = error.credential;
+
+    // ...
+  });
+    };
+
+    function facebookSignInRedirectResult() {
+  // [START auth_facebook_signin_redirect_result]
+  firebase.auth()
+    .getRedirectResult()
+    .then((result) => {
+      if (result.credential) {
+        /** @type {firebase.auth.OAuthCredential} */
+        var credential = result.credential;
+
+        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+        var token = credential.accessToken;
+        // ...
+      }
+      // The signed-in user info.
+      var user = result.user;
+    }).catch((error) => {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      // The email of the user's account used.
+      var email = error.email;
+      // The firebase.auth.AuthCredential type that was used.
+      var credential = error.credential;
+      // ...
+    });
+}
+
+
+// [START auth_facebook_callback]
+function checkLoginState(response) {
+  if (response.authResponse) {
+    // User is signed-in Facebook.
+    var unsubscribe = firebase.auth().onAuthStateChanged((firebaseUser) => {
+      unsubscribe();
+      // Check if we are already signed-in Firebase with the correct user.
+      if (!isUserEqual(response.authResponse, firebaseUser)) {
+        // Build Firebase credential with the Facebook auth token.
+        var credential = firebase.auth.FacebookAuthProvider.credential(
+            response.authResponse.accessToken);
+        
+        // Sign in with the credential from the Facebook user.
+        firebase.auth().signInWithCredential(credential)
+          .catch((error) => {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // The email of the user's account used.
+            var email = error.email;
+            // The firebase.auth.AuthCredential type that was used.
+            var credential = error.credential;
+            // ...
+          });
+      } else {
+        // User is already signed-in Firebase with the correct user.
+      }
+    });
+  } else {
+    // User is signed-out of Facebook.
+    firebase.auth().signOut();
+  }
+}
+// [END auth_facebook_callback]
+
+    </script>
+
+
+
+</body>
+</html>
